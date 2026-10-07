@@ -1,24 +1,18 @@
 # Hidra
 
-App de água + calorias com histórico diário das metas. Dá para instalar no celular como app (PWA).
+App de água + calorias com histórico diário das metas. Instala no celular e roda **sem precisar do PC**.
 
-## Rodar no PC
+## Link do app (sempre online)
 
-```bash
-cd DiarioAguaCalorias
-python -m http.server 5173
-```
+https://guss2618.github.io/hidra/
 
-Abra: http://127.0.0.1:5173/
+## Colocar no celular (uma vez só)
 
-## Colocar no celular
+1. Abra o link acima no **Chrome** (Android) ou **Safari** (iPhone)
+2. **Android:** menu ⋮ → **Instalar app** / **Adicionar à tela inicial**
+3. **iPhone:** Compartilhar → **Adicionar à Tela de Início**
 
-1. Deixe o PC e o celular na **mesma Wi‑Fi**
-2. Descubra o IP do PC (`ipconfig` no Windows) e abra no celular: `http://SEU_IP:5173`
-3. **Android (Chrome):** menu ⋮ → **Instalar app** ou **Adicionar à tela inicial**
-4. **iPhone (Safari):** Compartilhar → **Adicionar à Tela de Início**
-
-Depois de instalado, abre como app e continua funcionando offline. Os dados ficam salvos **neste aparelho**.
+Pronto: o ícone fica na tela inicial e funciona offline, sem ligar o PC. Os dados ficam salvos **neste aparelho**.
 
 ## Metas atuais (ganho muscular / InBody 19/08)
 
