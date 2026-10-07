@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a4d5c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Hidra" />
+  <meta name="description" content="App para acompanhar água, calorias e o histórico das metas do dia." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>Hidra — água e calorias do dia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="hero">
+      <p class="brand">Hidra</p>
+      <h1 class="headline">Ganho muscular, dia a dia.</h1>
+      <p class="lede">Metas pelo seu InBody (19/08): superávit pra crescer, água pro treino e proteína no prato.</p>
+      <p class="plan" id="planLabel">Plano: ganho muscular · 2500 ml · 2700 kcal · ~140 g proteína</p>
+      <p class="date" id="dateLabel"></p>
+      <div class="hero-actions">
+        <button type="button" class="btn btn-install" id="installBtn" hidden>Instalar no celular</button>
+        <p class="install-tip" id="installTip">No celular: abra este link no Chrome/Safari e use “Adicionar à tela inicial”.</p>
+      </div>
+    </header>
+
+    <section class="trackers" aria-label="Controles do dia">
+      <article class="panel panel-water" id="waterPanel">
+        <div class="panel-top">
+          <h2>Água</h2>
+          <button type="button" class="goal-btn" data-goal="water" aria-label="Editar meta de água">
+            Meta <span id="waterGoalLabel">2500</span> ml
+          </button>
+        </div>
+
+        <div class="meter" role="img" aria-labelledby="waterSummary">
+          <div class="meter-ring water-ring">
+            <svg viewBox="0 0 120 120" class="ring-svg">
+              <circle class="ring-track" cx="60" cy="60" r="52" />
+              <circle class="ring-fill" id="waterRing" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="meter-center">
+              <strong id="waterTotal">0</strong>
+              <span>ml</span>
+            </div>
+          </div>
+          <p class="summary" id="waterSummary">0% da meta</p>
+        </div>
+
+        <div class="quick-add" aria-label="Adicionar água">
+          <button type="button" class="chip" data-water="200">+200 ml</button>
+          <button type="button" class="chip" data-water="250">+250 ml</button>
+          <button type="button" class="chip" data-water="500">+500 ml</button>
+        </div>
+
+        <form class="inline-form" id="waterForm">
+          <label class="sr-only" for="waterCustom">Quantidade em ml</label>
+          <input id="waterCustom" type="number" min="1" step="1" inputmode="numeric" placeholder="ml customizado" required />
+          <button type="submit" class="btn btn-water">Beber</button>
+        </form>
+
+        <ul class="log" id="waterLog" aria-live="polite"></ul>
+      </article>
+
+      <article class="panel panel-cal" id="calPanel">
+        <div class="panel-top">
+          <h2>Calorias</h2>
+          <button type="button" class="goal-btn" data-goal="calories" aria-label="Editar meta de calorias">
+            Meta <span id="calGoalLabel">2700</span> kcal
+          </button>
+        </div>
+
+        <div class="meter" role="img" aria-labelledby="calSummary">
+          <div class="meter-ring cal-ring">
+            <svg viewBox="0 0 120 120" class="ring-svg">
+              <circle class="ring-track" cx="60" cy="60" r="52" />
+              <circle class="ring-fill" id="calRing" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="meter-center">
+              <strong id="calTotal">0</strong>
+              <span>kcal</span>
+            </div>
+          </div>
+          <p class="summary" id="calSummary">0% da meta</p>
+        </div>
+
+        <form class="meal-form" id="mealForm">
+          <label class="sr-only" for="mealName">Refeição</label>
+          <input id="mealName" type="text" placeholder="O que você comeu?" maxlength="80" required autocomplete="off" />
+          <label class="sr-only" for="mealKcal">Calorias</label>
+          <input id="mealKcal" type="number" min="1" step="1" inputmode="numeric" placeholder="kcal" required />
+          <button type="submit" class="btn btn-cal">Registrar</button>
+        </form>
+
+        <ul class="log" id="mealLog" aria-live="polite"></ul>
+      </article>
+    </section>
+
+    <section class="panel history-panel" aria-label="Histórico diário">
+      <div class="panel-top">
+        <h2>Histórico</h2>
+        <p class="history-streak" id="historyStreak">—</p>
+      </div>
+      <p class="history-lead">Dias em que você bateu (ou quase bateu) as metas.</p>
+      <ul class="history-list" id="historyList"></ul>
+    </section>
+
+    <footer class="footer">
+      <button type="button" class="btn btn-ghost" id="resetDay">Zerar dia</button>
+      <p class="hint">Salvo neste aparelho. Funciona offline depois de instalar.</p>
+    </footer>
+  </main>
+
+  <dialog class="modal" id="goalModal">
+    <form method="dialog" id="goalForm" class="modal-card">
+      <h3 id="goalTitle">Editar meta</h3>
+      <label for="goalInput" id="goalLabel">Valor</label>
+      <input id="goalInput" type="number" min="1" step="1" inputmode="numeric" required />
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-water" value="confirm">Salvar</button>
+        <button type="button" class="btn btn-ghost" id="goalCancel">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
